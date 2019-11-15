@@ -42,7 +42,7 @@ optlag <- function(data,maxlag){
 }
 
 #建立依据var模型的dlsa
-var.dlsa <- function(x,maxlag = 1, k = 1){
+var.dlsa <- function(x,maxlag = 10, k = 1){
   #数据维数
   n <- as.numeric(nrow(x))
   p <- as.numeric(ncol(x))
@@ -93,7 +93,7 @@ var.dlsa <- function(x,maxlag = 1, k = 1){
 }
 
 ##建立VAR模型
-var.model <- function(x,maxlag = 1){
+var.model <- function(x,maxlag = 10){
   #数据维数
   n <- as.numeric(nrow(x))
   p <- as.numeric(ncol(x))
@@ -121,7 +121,7 @@ var.model <- function(x,maxlag = 1){
 
 ########################################################################
 data <- mydata[c(1:(length(mydata[,1])-1)),]
-lag <- optlag(data,13)
+lag <- optlag(data,5)
 K <- 3
 p <- length(data[1,])
 Nrep <- lag*p
@@ -141,7 +141,7 @@ bias_wlse <- list()
 global_est <- var.model(data,lag)
       
 # WLSE estimator
-beta_est <- var.dlsa(data,maxlag = 13,k=K)
+beta_est <- var.dlsa(data,maxlag = 5,k=K)
       
 res$theta_global <- global_est$theta
 res$theta_wlse <- beta_est$theta
@@ -206,15 +206,3 @@ cat(" K = ", K, "\n",
     "global:          ", specify_decimal(global_pred/truevalue,k=3), "\n"
 
 )
-
-
-
-
-
-
-#取滞后期为2，模型中添加常数项和趋势项
-#v <- VAR(mydata,p=2,type="both")
-#vp <- predict(v,n.ahead = 12,ci=0.95)
-#plot(vp)
-
-
